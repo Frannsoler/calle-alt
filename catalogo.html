@@ -188,12 +188,15 @@
     <button id="finalizar-compra" class="finalizar-btn">Finalizar compra</button>
   
     <div id="formulario-pago" class="formulario-pago" style="display:none;">
-      <form action="https://formspree.io/f/xgvkvyrg" method="POST" id="formulario-compra">
+      <form
+  action="https://formspree.io/f/xdawjbrg"
+  method="POST" id="formulario-compra">
         <h3>Datos para la compra</h3>
-        
+
         <input type="text" name="nombre" placeholder="Nombre completo" required>
         <input type="email" name="email" placeholder="Correo electrónico" required>
         <input type="text" name="direccion" placeholder="Dirección de envío" required>
+        <input type="text" name="número de teléfono" placeholder="Número de teléfono" required>
         <select name="pago" required>
           <option value="">Selecciona método de pago</option>
           <option value="efectivo">Pago en efectivo (solo a CABA)</option>
