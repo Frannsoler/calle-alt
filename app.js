@@ -136,3 +136,151 @@ if (formularioCompra) {
     });
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  const botonesAgregar = document.querySelectorAll(".agregar-carrito-btn");
+  const listaCarrito = document.getElementById("carrito-lista");
+  const mensajeVacio = document.getElementById("carrito-vacio");
+  const totalElement = document.getElementById("total");
+  const finalizarBtn = document.getElementById("finalizar-compra");
+  const formularioPago = document.getElementById("formulario-pago");
+  const formularioCompra = document.getElementById("formulario-compra");
+  const resumenPedido = document.getElementById("resumenPedido");
+  const botonCarritoMovil = document.getElementById("abrir-carrito-movil");
+  const carritoContainer = document.querySelector(".carrito-container");
+
+  let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+  function guardarCarritoEnLocalStorage() {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  }
+
+  function actualizarCarrito() {
+    listaCarrito.innerHTML = "";
+
+    if (carrito.length === 0) {
+      mensajeVacio.style.display = "block";
+      totalElement.textContent = "Total: $0";
+    } else {
+      mensajeVacio.style.display = "none";
+      let total = 0;
+
+      carrito.forEach((item, index) => {
+        total += parseFloat(item.precio);
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          ${item.nombre} - Talle ${item.talle} - $${item.precio}
+          <button class="eliminar-btn" data-index="${index}">Eliminar</button>
+        `;
+        listaCarrito.appendChild(li);
+      });
+
+      totalElement.textContent = `Total: $${total}`;
+    }
+
+    guardarCarritoEnLocalStorage();
+  }
+
+  function actualizarResumenPedido() {
+    let resumen = "";
+    let total = 0;
+
+    carrito.forEach((item) => {
+      resumen += `${item.nombre} - Talle: ${item.talle} - $${item.precio}\n`;
+      total += parseFloat(item.precio);
+    });
+
+    if (resumenPedido) {
+      resumenPedido.value = `${resumen}\nTotal: $${total.toFixed(2)}`;
+    }
+  }
+
+  botonesAgregar.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const producto = btn.getAttribute("data-nombre");
+      const precio = btn.getAttribute("data-precio");
+      const productoCard = btn.closest(".producto");
+
+      const selectTalle = productoCard.querySelector(".select-talle");
+      const talleSeleccionado = selectTalle ? selectTalle.value : "";
+
+      if (selectTalle && !talleSeleccionado) {
+        alert("Por favor, selecciona un talle.");
+        return;
+      }
+
+      carrito.push({
+        nombre: producto,
+        precio: precio,
+        talle: talleSeleccionado || "Sin talle",
+      });
+
+      actualizarCarrito();
+
+      // efecto visual
+      if (productoCard) {
+        productoCard.classList.remove("producto-agregado");
+        void productoCard.offsetWidth;
+        productoCard.classList.add("producto-agregado");
+      }
+
+      // efecto en botón carrito móvil
+      if (botonCarritoMovil) {
+        botonCarritoMovil.textContent = `Carrito (${carrito.length})`;
+        botonCarritoMovil.style.transform = "scale(1.08)";
+        setTimeout(() => {
+          botonCarritoMovil.style.transform = "scale(1)";
+        }, 180);
+      }
+    });
+  });
+
+  listaCarrito.addEventListener("click", (e) => {
+    if (e.target.classList.contains("eliminar-btn")) {
+      const index = parseInt(e.target.getAttribute("data-index"), 10);
+      carrito.splice(index, 1);
+      actualizarCarrito();
+
+      if (botonCarritoMovil) {
+        botonCarritoMovil.textContent = carrito.length > 0 ? `Carrito (${carrito.length})` : "Carrito";
+      }
+    }
+  });
+
+  if (finalizarBtn && formularioPago) {
+    finalizarBtn.addEventListener("click", () => {
+      if (carrito.length === 0) {
+        alert("Tu carrito está vacío.");
+        return;
+      }
+
+      actualizarResumenPedido();
+      formularioPago.style.display = "block";
+      formularioPago.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+
+  if (formularioCompra) {
+    formularioCompra.addEventListener("submit", () => {
+      actualizarResumenPedido();
+    });
+  }
+
+  if (botonCarritoMovil && carritoContainer) {
+    botonCarritoMovil.addEventListener("click", () => {
+      carritoContainer.scrollIntoView({ behavior: "smooth" });
+    });
+  }
+
+  document.querySelectorAll(".select-talle").forEach((select) => {
+    setTimeout(() => {
+      select.classList.add("visible");
+    }, 300);
+  });
+
+  actualizarCarrito();
+
+  if (botonCarritoMovil && carrito.length > 0) {
+    botonCarritoMovil.textContent = `Carrito (${carrito.length})`;
+  }
+});
