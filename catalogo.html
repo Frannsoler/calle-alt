@@ -1,4 +1,26 @@
-<!-- Producto 1 -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ELFBAR - Calle Alta</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Encabezado -->
+  <header>
+    <div class="navbar">
+      <h1 class="logo">Calle Alta</h1>
+      <a href="index.html" class="catalogo-btn">Inicio</a>
+      <a href="remeras.html" class="catalogo-btn">LOSTMARY</a>
+    </div>
+
+  <!-- Catálogo -->
+  <section class="catalogo">
+    <h2>ELFBAR</h2>
+
+    <div class="productos">
+      <!-- Producto 1 -->
 <div class="producto">
   <img src="elfbar tiger blood.png" alt="ELF BAR 40K TIGER BLOOD">
   <h3>ELF BAR 40K TIGER BLOOD</h3>
@@ -165,5 +187,52 @@
   <p>$26500</p>
   <button class="agregar-carrito-btn" data-nombre="ELFBAR 40K WILD BERRY SLUSH" data-precio="26500">
     Agregar al carrito
+  </button>
+</div>
+  
+  
+
+</section>
+   <!-- Carrito -->
+   <section class="carrito-container">
+    <h2>Carrito</h2>
+    <ul id="carrito-lista"></ul>
+    <p id="carrito-vacio">Tu carrito está vacío.</p>
+    <p id="total">Total: $0</p>
+    <button id="finalizar-compra" class="finalizar-btn">Finalizar compra</button>
+  
+    <div id="formulario-pago" class="formulario-pago" style="display:none;">
+      <form
+  action="https://formspree.io/f/xdawjbrg"
+  method="POST" id="formulario-compra">
+        <h3>Datos para la compra</h3>
+
+        <input type="text" name="nombre" placeholder="Nombre completo" required>
+        <input type="email" name="email" placeholder="Correo electrónico" required>
+        <input type="text" name="direccion" placeholder="Dirección de envío" required>
+        <input type="text" name="número de teléfono" placeholder="Número de teléfono" required>
+        <select name="pago" required>
+          <option value="">Selecciona método de pago</option>
+          <option value="efectivo">Pago en efectivo (solo a CABA)</option>
+          <option value="transferencia">Transferencia</option>
+        </select>
+  <button id="abrir-carrito-movil" class="carrito-flotante">
+  Carrito
+</button>
+        <button id="abrir-carrito-movil" class="carrito-flotante">
+  Carrito
+</button>
+        <!-- Este textarea es donde el carrito se copia automáticamente -->
+        <textarea name="pedido" id="resumenPedido" style="display: none;"></textarea>
+  
+        <button type="submit" class="pagar-btn">Confirmar compra</button>
+      </form>
+    </div>
+  </section>
+  <script src="app.js"></script>
+</body>
+</html>
+
+
   </button>
 </div>
